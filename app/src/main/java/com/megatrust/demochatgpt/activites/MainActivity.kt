@@ -1,19 +1,17 @@
 package com.megatrust.demochatgpt.activites
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.megatrust.demochatgpt.R
 import com.megatrust.demochatgpt.adapters.MessageAdapter
 import com.megatrust.demochatgpt.data.Message
 import com.megatrust.demochatgpt.databinding.ActivityMainBinding
+import com.megatrust.demochatgpt.utills.Resource
 import com.megatrust.demochatgpt.viewmodels.QuestionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,26 +38,49 @@ class MainActivity : AppCompatActivity() {
             messageRecyclerView.adapter = messageAdapter
         }
 
+        viewModel.completionLiveData.observe(this) {
+            when (it) {
+
+                is Resource.Error -> {
+
+                }
+
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Success -> {
+                    it.data?.let { nonNull ->
+                        messageList.add(nonNull)
+                        messageAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                is Resource.Unspecified -> {
+
+                }
+            }
+        }
+
     }
 
 
     private fun addCallBacks() {
         binding.apply {
-            sendButtonIv.setOnClickListener {
-                val query = queryEt.text.toString()
-                if (query.trim().isNotEmpty()) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        viewModel.getApiAnswer(query)
-                    }
-                    messageList.add(Message(query, Message.SENT_BY_ME))
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "Query Field can't be null",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
 
+            queryLayout.setEndIconOnClickListener {
+                Toast.makeText(applicationContext, queryLayout.editText?.text, Toast.LENGTH_LONG)
+                    .show()
+
+                val query = queryLayout.editText?.text.toString()
+
+                query.let {
+                    messageList.add(Message(it, Message.SENT_BY_ME))
+                    messageAdapter.notifyDataSetChanged()
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        viewModel.getApiAnswer(it)
+                    }
+                }
             }
         }
 

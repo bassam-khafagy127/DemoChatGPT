@@ -1,27 +1,26 @@
 package com.megatrust.demochatgpt.repositories
 
-import android.util.Log
 import com.megatrust.demochatgpt.data.remote.CompletionRequest
+import com.megatrust.demochatgpt.data.remote.CompletionResponse
 import com.megatrust.demochatgpt.networking.ChatGPTApiService
-import com.megatrust.demochatgpt.utills.Constant.LOG_TAG_RETROFIT
+import retrofit2.Response
 import javax.inject.Inject
 
 class QuestionsRepository @Inject constructor(
     private val chatGptApiService: ChatGPTApiService
 ) {
 
-    suspend fun getApiQuestion(question: String) {
+    suspend fun getApiQuestion(question: String): Response<CompletionResponse> {
         val completionRequest = CompletionRequest(
-            maxTokens = 4000,
+            maxTokens = 2000,
             model = "text-davinci-003",
             prompt = "$question",
             temperature = 0
         )
-        val response = chatGptApiService.getCompletion(completionRequest)
-        if (response.isSuccessful) {
-            Log.d(LOG_TAG_RETROFIT,"Success")
-        }else Log.d(LOG_TAG_RETROFIT,"Error")
+        return chatGptApiService.getCompletion(completionRequest)
     }
+
+
 
 
 }
