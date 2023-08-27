@@ -1,6 +1,7 @@
 package com.megatrust.demochatgpt.activites
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -42,14 +43,25 @@ class MainActivity : AppCompatActivity() {
             when (it) {
 
                 is Resource.Error -> {
-
+                    binding.apply {
+                        progressCircular.visibility = View.GONE
+                        imageViewError.visibility = View.VISIBLE
+                        Toast.makeText(applicationContext,it.message,Toast.LENGTH_LONG).show()
+                    }
                 }
 
                 is Resource.Loading -> {
-
+                    binding.apply {
+                        progressCircular.visibility = View.VISIBLE
+                    }
                 }
 
                 is Resource.Success -> {
+                    binding.apply {
+                        progressCircular.visibility = View.GONE
+                        imageViewError.visibility = View.GONE
+
+                    }
                     it.data?.let { nonNull ->
                         messageList.add(nonNull)
                         messageAdapter.notifyDataSetChanged()

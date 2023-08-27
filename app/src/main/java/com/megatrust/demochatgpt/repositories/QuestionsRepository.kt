@@ -12,7 +12,7 @@ class QuestionsRepository @Inject constructor(
 
     suspend fun getApiQuestion(question: String): Response<CompletionResponse> {
         val completionRequest = CompletionRequest(
-            maxTokens = 2000,
+            maxTokens = 4000,
             model = "text-davinci-003",
             prompt = "$question",
             temperature = 0
