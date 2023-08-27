@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Demo chatGpt</string>
+    <string name="enter_question">Enter question</string>
+</resources>
