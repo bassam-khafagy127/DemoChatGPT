@@ -27,10 +27,12 @@ class MessageAdapter(private val messageList: ArrayList<Message>) :
         when (messageList[position].sender) {
             Message.SENT_BY_BOT -> {
                 (holder as BotMessageViewHolder).botMessage.text = messageList[position].message
+                holder.botMessageTime.text = messageList[position].time
             }
 
             Message.SENT_BY_ME -> {
                 (holder as UserMessageViewHolder).userMessage.text = messageList[position].message
+                holder.userMessageTime.text = messageList[position].time
             }
         }
     }
@@ -40,11 +42,13 @@ class MessageAdapter(private val messageList: ArrayList<Message>) :
 
     class UserMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userMessage: TextView = itemView.findViewById(R.id.user_message_tv)
+        val userMessageTime: TextView = itemView.findViewById(R.id.userMessageTime)
 
     }
 
     class BotMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val botMessage: TextView = itemView.findViewById(R.id.bot_message_tv)
+        val botMessageTime: TextView = itemView.findViewById(R.id.botMessageTime)
     }
 
 

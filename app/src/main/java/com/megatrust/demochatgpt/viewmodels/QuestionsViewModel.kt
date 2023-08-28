@@ -8,6 +8,7 @@ import com.megatrust.demochatgpt.data.Message
 import com.megatrust.demochatgpt.data.remote.CompletionResponse
 import com.megatrust.demochatgpt.repositories.QuestionsRepository
 import com.megatrust.demochatgpt.utills.Resource
+import com.megatrust.demochatgpt.utills.getCurrentTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -38,7 +39,7 @@ class QuestionsViewModel @Inject constructor(private val repository: QuestionsRe
         if (completionResponse.isSuccessful) {
             _completionLiveData.postValue(
                 Resource.Success(completionResponse.body()?.choices?.firstOrNull()
-                    ?.let { Message(it.text, Message.SENT_BY_BOT) })
+                    ?.let { Message(it.text, Message.SENT_BY_BOT, getCurrentTime()) })
             )
         } else {
             _completionLiveData.postValue(Resource.Error(completionResponse.errorBody().toString()))

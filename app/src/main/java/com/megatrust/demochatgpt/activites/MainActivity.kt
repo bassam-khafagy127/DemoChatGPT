@@ -11,6 +11,7 @@ import com.megatrust.demochatgpt.adapters.MessageAdapter
 import com.megatrust.demochatgpt.data.Message
 import com.megatrust.demochatgpt.databinding.ActivityMainBinding
 import com.megatrust.demochatgpt.utills.Resource
+import com.megatrust.demochatgpt.utills.getCurrentTime
 import com.megatrust.demochatgpt.viewmodels.QuestionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     binding.apply {
                         progressCircular.visibility = View.GONE
                         imageViewError.visibility = View.VISIBLE
-                        Toast.makeText(applicationContext,it.message,Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
                     }
                 }
 
@@ -81,19 +82,18 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
 
             queryLayout.setEndIconOnClickListener {
-                Toast.makeText(applicationContext, queryLayout.editText?.text, Toast.LENGTH_LONG)
-                    .show()
-
                 val query = queryLayout.editText?.text.toString()
-
                 query.let {
-                    messageList.add(Message(it, Message.SENT_BY_ME))
+                    messageList.add(Message(it, Message.SENT_BY_ME, getCurrentTime()))
                     messageAdapter.notifyDataSetChanged()
                     lifecycleScope.launch(Dispatchers.IO) {
                         viewModel.getApiAnswer(it)
                     }
+                    queryLayout.editText?.text?.clear()
                 }
+                messageRecyclerView.scrollToPosition(messageAdapter.itemCount - 1)
             }
+
         }
 
     }
