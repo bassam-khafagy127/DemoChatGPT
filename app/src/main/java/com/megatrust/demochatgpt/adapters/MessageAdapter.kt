@@ -26,7 +26,7 @@ class MessageAdapter(private val messageList: ArrayList<Message>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (messageList[position].sender) {
             Message.SENT_BY_BOT -> {
-                (holder as BotMessageViewHolder).botMessage.text = messageList[position].message
+                (holder as BotMessageViewHolder).botMessage.text = messageList[position].message.trim()
                 holder.botMessageTime.text = messageList[position].time
             }
 

@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
 
                 is Resource.Success -> {
                     binding.apply {
+                        messageRecyclerView.scrollToPosition(messageAdapter.itemCount-1 )
                         progressCircular.visibility = View.GONE
                         imageViewError.visibility = View.GONE
 
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     queryLayout.editText?.text?.clear()
                 }
-                messageRecyclerView.scrollToPosition(messageAdapter.itemCount - 1)
+                messageRecyclerView.scrollToPosition(messageAdapter.itemCount-1 )
             }
 
         }
